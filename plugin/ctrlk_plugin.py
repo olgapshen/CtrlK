@@ -61,7 +61,7 @@ def GetItemsMatchingPattern(prefix, limit):
     return lastRet
 
 def JumpTo(filename, line, column):
-  global jumpState  
+  global jumpState
   if filename != vim.current.buffer.name:
     try:
       vim.command("edit %s" % filename)
@@ -124,7 +124,7 @@ def PopulateScopeNames(cursor, scopeNames, scopeDepths, depth = 0):
                             scopeNames.append('')
                             scopeDepths.append(-1)
 
-                        if scopeDepths[i] < depth: 
+                        if scopeDepths[i] < depth:
                             scopeDepths[i] = depth
                             if scopeNames[i] != '': scopeNames[i] += '::'
                             scopeNames[i] += ch.spelling
@@ -377,7 +377,7 @@ def api_init_thread(libraryPath):
         else:
             parsingState = "Failed to initialize"
             pass
-    
+
     if g_api is not None:
         g_builtin_header_path = g_api.get_builtin_header_path()
 
@@ -404,4 +404,4 @@ def GetCtrlKState():
     global parsingState
     global parsingCurrentState
     with parseLock:
-        print "Index: %s / Current: %s / Jump: %s" % (parsingState, parsingCurrentState, jumpState)
+        print("Index: %s / Current: %s / Jump: %s" % (parsingState, parsingCurrentState, jumpState))

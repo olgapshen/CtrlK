@@ -8,16 +8,23 @@ catch /E117/
 endtry
 
 try
-  python import clang
+  python3 import clang
 catch
-  echoerr '***** Please install clang module for python *****'
+  echoerr '***** Please install clang module for python*****'
   finish
 endtry
 
 try
-  python import ctrlk
+  python3 import ctrlk
 catch
-  echoerr '***** Please install ctrlk module for python *****'
+  echoerr '***** Please install ctrlk module for python*****'
+  finish
+endtry
+
+try
+  python3 import vim
+catch
+  echoerr '***** vim not imported*****'
   finish
 endtry
 
@@ -26,10 +33,10 @@ au FileType c,cpp,objc,objcpp call <SID>CtrlKInitBuffer()
 call l9#defineVariableDefault('g:ctrlk_clang_library_path'        , '')
 
 let s:plugin_path = escape(expand('<sfile>:p:h'), '\')
-exe 'pyfile ' . fnameescape(s:plugin_path) . '/ctrlk_plugin.py'
+exe 'py3file ' . fnameescape(s:plugin_path) . '/ctrlk_plugin.py'
 
 function! CtrlKNavigate(entry, mode)
-    python NavigateToEntry(vim.eval('a:entry'))
+    python3 NavigateToEntry(vim.eval('a:entry'))
 endfunction
 
 function! CtrlKNavigateSymbols()
@@ -45,28 +52,28 @@ function! CtrlKNavigateSymbols()
 endfunction
 
 function! GetCtrlKState()
-    python GetCtrlKState()
+    python3 GetCtrlKState()
 endfunction
 
 function! ResetCtrlK()
-    python ResetIndex()
+    python3 ResetIndex()
 endfunction
 
 function! CtrlKGetCurrentScope()
-    python vim.command('let l:current_scope = "' + GetCurrentScopeStr() + '"')
+    python3 vim.command('let l:current_scope = "' + GetCurrentScopeStr() + '"')
     return l:current_scope
 endfunction
 
 function! CtrlKGoToDefinition()
-    python GoToDefinition('')
+    python3 GoToDefinition('')
 endfunction
 
 function! CtrlKGoToDefinitionAndSplit(mode)
-    python GoToDefinition(vim.eval('a:mode'))
+    python3 GoToDefinition(vim.eval('a:mode'))
 endfunction
 
 function! CtrlKGetReferences()
-    python vim.command('let l:list = ' + json.dumps(FindReferences()))
+    python3 vim.command('let l:list = ' + json.dumps(FindReferences()))
     if !empty(l:list)
         call setloclist(0, l:list)
         lopen
@@ -80,11 +87,11 @@ function! s:ReadyToParse()
         return
     endif
     let b:my_changedtick = b:changedtick
-    python RequestParse()
+    python3 RequestParse()
 endfunction
 
 function! s:OnBufferUnload(fname)
-    python CtrlKBufferUnload(vim.eval('a:fname'))
+    python3 CtrlKBufferUnload(vim.eval('a:fname'))
 endfunction
 
 function! CtrlKStartFollowDefinition()
@@ -97,7 +104,7 @@ endfunction
 let g:lastFile = ''
 function CtrlKOpenFileInFollowWindow(fname, line)
     if exists("g:ctrlk_follow_definition") && g:ctrlk_follow_definition == 1
-        if mode()=~#"^[vV\<C-v>]" 
+        if mode()=~#"^[vV\<C-v>]"
             " do nothing in visual mode
             return
         endif
@@ -132,12 +139,11 @@ function! s:CtrlKInitBuffer()
 
     augroup CtrlK
         autocmd!
-        autocmd VimLeave * python LeaveCtrlK()
+        autocmd VimLeave * python3 LeaveCtrlK()
         au CursorHold,CursorHoldI,InsertLeave,BufEnter,BufRead,FileType <buffer> call <SID>ReadyToParse()
         au BufUnload <buffer> call <SID>OnBufferUnload(expand('<afile>:p'))
         autocmd CursorMoved,CursorMovedI * call CtrlKGoToDefinitionAndSplit('f')
     augroup END
 endfunction
 
-python InitCtrlK(vim.eval('g:ctrlk_clang_library_path'))
-
+python3 InitCtrlK(vim.eval('g:ctrlk_clang_library_path'))

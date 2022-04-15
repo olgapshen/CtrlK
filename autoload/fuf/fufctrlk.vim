@@ -135,7 +135,7 @@ function! s:handler.getMatchingCompleteItems(patternBase)
         \ copy(self.stats), 'v:val.pattern ==# patternSet.primaryForRank')
 
   " NOTE: In order to know an excess, plus 1 to limit number
-  python vim.command('let s:my_items = ' + str(GetItemsMatchingPattern(vim.eval('a:patternBase'), int(vim.eval('g:fuf_enumeratingLimit')) + 1)))
+  python3 vim.command('let s:my_items = ' + str(GetItemsMatchingPattern(vim.eval('a:patternBase'), int(vim.eval('g:fuf_enumeratingLimit')) + 1)))
 
   call map(s:my_items, 'fuf#makeNonPathItem(v:val, "")')
   call fuf#mapToSetSerialIndex(s:my_items, 1)
